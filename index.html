@@ -1,111 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to My Website</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: lightblue;
-            font-family: Cambria, serif;
-            font-size: 14px;
-            text-align: center;
-        }
+<title>Welcome to My Website</title>
 
-        h1 {
-            color: darkblue;
-            margin-top: 30px;
-        }
+<style>
 
-        p {
-            color: #003366;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        /* Scrolling Text */
-        .scroll {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            background-color: #d9f2ff;
-            padding: 10px 0;
-            margin: 20px 0;
-        }
+body{
+    font-family:Cambria,serif;
+    font-size:14px;
+    background:linear-gradient(135deg,#c7ecff,#eaf8ff);
+    color:#003366;
+}
 
-        .scroll span {
-            display: inline-block;
-            color: blue;
-            font-weight: bold;
-            animation: move 10s linear infinite;
-        }
+/* Navigation */
 
-        @keyframes move {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(-100%);
-            }
-        }
+nav{
+    background:#0056b3;
+    color:white;
+    padding:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-        /* Button */
-        button {
-            background-color: blue;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            font-family: Cambria, serif;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+nav h2{
+    letter-spacing:1px;
+}
 
-        button:hover {
-            background-color: darkblue;
-        }
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:25px;
+}
 
-        /* Grid Layout */
-        .grid-container {
-            width: 80%;
-            margin: 30px auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
+nav ul li{
+    cursor:pointer;
+}
 
-        .grid-box {
-            background-color: white;
-            border: 2px solid blue;
-            padding: 20px;
-            border-radius: 8px;
-            color: darkblue;
-            font-weight: bold;
-        }
-    </style>
+/* Hero */
+
+.hero{
+    text-align:center;
+    padding:70px 20px;
+}
+
+.hero h1{
+    font-size:42px;
+    color:#004080;
+    margin-bottom:15px;
+}
+
+.hero p{
+    font-size:18px;
+    margin-bottom:30px;
+}
+
+/* Button */
+
+button{
+    background:#0066ff;
+    color:white;
+    border:none;
+    padding:14px 30px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:.3s;
+    font-family:Cambria;
+}
+
+button:hover{
+    background:#003d99;
+    transform:scale(1.05);
+}
+
+/* Scrolling Text */
+
+.scroll{
+    width:100%;
+    overflow:hidden;
+    white-space:nowrap;
+    background:white;
+    padding:12px;
+    border-top:2px solid #0077ff;
+    border-bottom:2px solid #0077ff;
+}
+
+.scroll span{
+    display:inline-block;
+    animation:move 15s linear infinite;
+    color:#0056b3;
+    font-weight:bold;
+}
+
+@keyframes move{
+
+from{
+transform:translateX(100%);
+}
+
+to{
+transform:translateX(-100%);
+}
+
+}
+
+/* Grid */
+
+.grid-container{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:25px;
+
+padding:50px;
+
+}
+
+.card{
+
+background:white;
+
+padding:30px;
+
+border-radius:15px;
+
+box-shadow:0 10px 20px rgba(0,0,0,.15);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.card h3{
+
+color:#0056b3;
+
+margin-bottom:10px;
+
+}
+
+/* Footer */
+
+footer{
+
+background:#0056b3;
+
+color:white;
+
+padding:20px;
+
+text-align:center;
+
+margin-top:30px;
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-    <h1>Welcome to My Website</h1>
+<nav>
 
-    <p>This webpage is designed using HTML and CSS.</p>
+<h2>My Website</h2>
 
-    <div class="scroll">
-        <span>Welcome to My Website • Learn HTML • Learn CSS • Build Amazing Webpages</span>
-    </div>
+<ul>
 
-    <button>Click Here</button>
+<li>Home</li>
 
-    <div class="grid-container">
-        <div class="grid-box">HTML</div>
-        <div class="grid-box">CSS</div>
-        <div class="grid-box">JavaScript</div>
-        <div class="grid-box">Responsive Design</div>
-        <div class="grid-box">Grid Layout</div>
-        <div class="grid-box">Animations</div>
-    </div>
+<li>About</li>
+
+<li>Services</li>
+
+<li>Contact</li>
+
+</ul>
+
+</nav>
+
+<section class="hero">
+
+<h1>Welcome to My Website</h1>
+
+<p>Designed using HTML & CSS | Internet Programming Lab</p>
+
+<button>Explore</button>
+
+</section>
+
+<div class="scroll">
+
+<span>
+🌐 Welcome to My Website • HTML • CSS • Grid Layout • Animations • Responsive Design • GitHub Pages
+</span>
+
+</div>
+
+<div class="grid-container">
+
+<div class="card">
+<h3>HTML</h3>
+<p>Structure of every webpage.</p>
+</div>
+
+<div class="card">
+<h3>CSS</h3>
+<p>Used for styling and beautiful layouts.</p>
+</div>
+
+<div class="card">
+<h3>Grid Layout</h3>
+<p>Create responsive page designs easily.</p>
+</div>
+
+<div class="card">
+<h3>Animations</h3>
+<p>Make webpages interactive using CSS.</p>
+</div>
+
+<div class="card">
+<h3>GitHub</h3>
+<p>Host websites online using GitHub Pages.</p>
+</div>
+
+<div class="card">
+<h3>Future</h3>
+<p>Learn JavaScript and build dynamic websites.</p>
+</div>
+
+</div>
+
+<footer>
+
+© 2026 Sairaj C | CSA4303 Internet Programming Lab
+
+</footer>
 
 </body>
+
 </html>
