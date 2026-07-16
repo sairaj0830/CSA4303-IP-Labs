@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Website</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: lightblue;
+            font-family: Cambria, serif;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        h1 {
+            color: darkblue;
+            margin-top: 30px;
+        }
+
+        p {
+            color: #003366;
+        }
+
+        /* Scrolling Text */
+        .scroll {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: #d9f2ff;
+            padding: 10px 0;
+            margin: 20px 0;
+        }
+
+        .scroll span {
+            display: inline-block;
+            color: blue;
+            font-weight: bold;
+            animation: move 10s linear infinite;
+        }
+
+        @keyframes move {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Button */
+        button {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-family: Cambria, serif;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkblue;
+        }
+
+        /* Grid Layout */
+        .grid-container {
+            width: 80%;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .grid-box {
+            background-color: white;
+            border: 2px solid blue;
+            padding: 20px;
+            border-radius: 8px;
+            color: darkblue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Welcome to My Website</h1>
+
+    <p>This webpage is designed using HTML and CSS.</p>
+
+    <div class="scroll">
+        <span>Welcome to My Website • Learn HTML • Learn CSS • Build Amazing Webpages</span>
+    </div>
+
+    <button>Click Here</button>
+
+    <div class="grid-container">
+        <div class="grid-box">HTML</div>
+        <div class="grid-box">CSS</div>
+        <div class="grid-box">JavaScript</div>
+        <div class="grid-box">Responsive Design</div>
+        <div class="grid-box">Grid Layout</div>
+        <div class="grid-box">Animations</div>
+    </div>
+
+</body>
+</html>
