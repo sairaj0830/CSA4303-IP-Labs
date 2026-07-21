@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Transition & Transform Demo</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+}
+
+/* Navigation */
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 80px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(12px);
+    position:sticky;
+    top:0;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#38bdf8;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:30px;
+}
+
+nav ul li{
+    cursor:pointer;
+    transition:.3s;
+}
+
+nav ul li:hover{
+    color:#38bdf8;
+    transform:translateY(-3px);
+}
+
+/* Hero Section */
+.hero{
+    height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:55px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    width:70%;
+    color:#cbd5e1;
+    margin-bottom:40px;
+    line-height:1.6;
+}
+
+.btn{
+    padding:15px 35px;
+    background:#38bdf8;
+    border:none;
+    color:white;
+    font-size:18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.4s;
+}
+
+.btn:hover{
+    background:#0284c7;
+    transform:scale(1.1);
+    box-shadow:0 15px 30px rgba(56,189,248,.5);
+}
+
+/* Cards */
+.container{
+    width:90%;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+    padding:60px 0;
+}
+
+.card{
+    background:white;
+    color:#111;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 12px 25px rgba(0,0,0,.25);
+    transition:.5s;
+}
+
+.card h2{
+    margin-bottom:15px;
+}
+
+.card p{
+    color:#555;
+}
+
+.card:hover{
+    transform:translateY(-20px) scale(1.05);
+    box-shadow:0 20px 40px rgba(0,0,0,.45);
+}
+
+/* Gallery */
+.gallery{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    padding:50px;
+    flex-wrap:wrap;
+}
+
+.image{
+    width:280px;
+    height:180px;
+    border-radius:15px;
+    overflow:hidden;
+    cursor:pointer;
+}
+
+.image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.6s;
+}
+
+.image:hover img{
+    transform:scale(1.2) rotate(3deg);
+}
+
+/* Footer */
+footer{
+    text-align:center;
+    padding:30px;
+    background:#020617;
+    color:#94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">WebTech</div>
+
+    <ul>
+        <li>Home</li>
+        <li>Services</li>
+        <li>Portfolio</li>
+        <li>Contact</li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>CSS Transition & Transform Demo</h1>
+
+    <p>
+        This webpage demonstrates how modern websites use CSS transitions
+        and transformations to create smooth, interactive animations that
+        improve user experience.
+    </p>
+
+    <button class="btn">Explore More</button>
+</section>
+
+<section class="container">
+
+<div class="card">
+<h2>Scale Effect</h2>
+<p>The card enlarges smoothly when hovered.</p>
+</div>
+
+<div class="card">
+<h2>Lift Effect</h2>
+<p>The card moves upward using translateY().</p>
+</div>
+
+<div class="card">
+<h2>Shadow Effect</h2>
+<p>The shadow becomes deeper for a premium look.</p>
+</div>
+
+</section>
+
+<section class="gallery">
+
+<div class="image">
+<img src="https://picsum.photos/500/300?1">
+</div>
+
+<div class="image">
+<img src="https://picsum.photos/500/300?2">
+</div>
+
+<div class="image">
+<img src="https://picsum.photos/500/300?3">
+</div>
+
+</section>
+
+<footer>
+© 2026 Professional CSS Transition & Transform Demo
+</footer>
+
+</body>
+</html>

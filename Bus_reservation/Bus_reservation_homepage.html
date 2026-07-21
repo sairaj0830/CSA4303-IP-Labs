@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkyRide - Bus Reservation</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#071B36,#0D3B66,#1E6091);
+    color:#fff;
+    overflow:hidden;
+}
+
+/* Animated Background */
+
+body::before{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    background:rgba(255,255,255,.08);
+    border-radius:50%;
+    top:-220px;
+    left:-180px;
+    animation:float1 8s ease-in-out infinite;
+}
+
+body::after{
+    content:"";
+    position:absolute;
+    width:450px;
+    height:450px;
+    background:rgba(255,255,255,.05);
+    border-radius:50%;
+    bottom:-180px;
+    right:-150px;
+    animation:float2 10s ease-in-out infinite;
+}
+
+/* Navbar */
+
+nav{
+    height:80px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 80px;
+    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,.08);
+
+    animation:slideDown 1s;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:bold;
+    color:#FFD60A;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:35px;
+}
+
+nav ul li{
+    cursor:pointer;
+    transition:.4s;
+}
+
+nav ul li:hover{
+    color:#FFD60A;
+    transform:translateY(-4px);
+}
+
+/* Hero */
+
+.hero{
+    height:calc(100vh - 80px);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 80px;
+}
+
+.left{
+    width:45%;
+    animation:fadeLeft 1.2s;
+}
+
+.left h1{
+    font-size:58px;
+    line-height:1.2;
+}
+
+.left span{
+    color:#FFD60A;
+}
+
+.left p{
+    margin:25px 0;
+    color:#dbeafe;
+    line-height:1.8;
+}
+
+/* Button */
+
+.btn{
+    display:inline-block;
+    padding:15px 35px;
+    background:#FFD60A;
+    color:#000;
+    font-weight:bold;
+    text-decoration:none;
+    border-radius:12px;
+    transition:.4s;
+}
+
+.btn:hover{
+    transform:translateY(-8px) scale(1.05);
+    box-shadow:0 20px 40px rgba(255,214,10,.5);
+}
+
+/* Booking Card */
+
+.booking{
+    margin-top:35px;
+    width:100%;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(20px);
+    border-radius:18px;
+    padding:18px;
+
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:12px;
+
+    animation:fadeUp 1.5s;
+}
+
+.booking input{
+
+    padding:14px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    font-size:15px;
+}
+
+.booking button{
+
+    background:#FFD60A;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+
+    transition:.4s;
+}
+
+.booking button:hover{
+
+    background:white;
+    transform:scale(1.05);
+}
+
+/* Right */
+
+.right{
+
+    width:45%;
+    display:flex;
+    justify-content:center;
+    position:relative;
+}
+
+/* Bus */
+
+.bus{
+
+    width:520px;
+    animation:busFloat 4s ease-in-out infinite;
+    filter:drop-shadow(0 30px 30px rgba(0,0,0,.45));
+}
+
+/* Floating Cards */
+
+.card{
+
+    position:absolute;
+    padding:18px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(15px);
+    border-radius:15px;
+
+    transition:.5s;
+}
+
+.card:hover{
+
+    transform:translateY(-12px) scale(1.05);
+}
+
+.card1{
+
+    top:80px;
+    left:0;
+    animation:floatCard 5s infinite;
+}
+
+.card2{
+
+    bottom:60px;
+    right:0;
+    animation:floatCard 6s infinite;
+}
+
+.card h3{
+
+    color:#FFD60A;
+}
+
+/* Animations */
+
+@keyframes slideDown{
+
+from{
+opacity:0;
+transform:translateY(-60px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes fadeLeft{
+
+from{
+opacity:0;
+transform:translateX(-80px);
+}
+
+to{
+opacity:1;
+transform:translateX(0);
+}
+
+}
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(80px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes busFloat{
+
+0%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-18px);
+}
+
+100%{
+transform:translateY(0);
+}
+
+}
+
+@keyframes floatCard{
+
+0%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-15px);
+}
+
+100%{
+transform:translateY(0);
+}
+
+}
+
+@keyframes float1{
+
+50%{
+transform:translate(40px,30px);
+}
+
+}
+
+@keyframes float2{
+
+50%{
+transform:translate(-40px,-30px);
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">🚌 SkyRide</div>
+
+<ul>
+<li>Home</li>
+<li>Routes</li>
+<li>Offers</li>
+<li>My Bookings</li>
+<li>Contact</li>
+</ul>
+
+</nav>
+
+<section class="hero">
+
+<div class="left">
+
+<h1>
+Travel <span>Smarter</span><br>
+Book Your Bus Instantly
+</h1>
+
+<p>
+Fast, secure and comfortable bus reservations across India.
+Compare prices, choose your seat and travel with confidence.
+</p>
+
+<a href="#" class="btn">Explore Routes</a>
+
+<div class="booking">
+
+<input type="text" placeholder="From">
+
+<input type="text" placeholder="To">
+
+<input type="date">
+
+<input type="number" placeholder="Passengers">
+
+<button>Search</button>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<img class="bus"
+src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=900"
+alt="Bus">
+
+<div class="card card1">
+<h3>500+ Routes</h3>
+<p>Across India</p>
+</div>
+
+<div class="card card2">
+<h3>⭐ 4.9 Rating</h3>
+<p>Trusted by Travelers</p>
+</div>
+
+</div>
+
+</section>
+
+</body>
+</html>
