@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confluence &mdash; Online Symposium Portal</title>
+<style>
+  :root{
+    --ink:#1B2A4A;
+    --cream:#F7F4EC;
+    --gold:#C9A227;
+    --terracotta:#C15B3C;
+    --slate:#5B6270;
+    --line: rgba(27,42,74,0.14);
+    --danger:#B3261E;
+    --success:#1E6B3C;
+    --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--cream); color:var(--ink); font-family:var(--body); line-height:1.6; }
+  h1,h2,h3{ font-family:var(--display); font-weight:600; margin:0 0 .45em; letter-spacing:-0.01em; }
+  p{ margin:0 0 1em; }
+  a{ color:inherit; }
+
+  a.skip-link{
+    position:absolute; left:-999px; top:auto;
+    background:var(--ink); color:var(--cream); padding:10px 16px; border-radius:6px; z-index:100;
+  }
+  a.skip-link:focus{ left:16px; top:16px; }
+
+  header.site-head{
+    position:sticky; top:0; z-index:50;
+    background:rgba(247,244,236,0.94); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.primary-nav{
+    max-width:1080px; margin:0 auto; padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:600; font-size:1.2rem; }
+  .brand .mark{ width:11px; height:11px; background:var(--gold); border-radius:50%; }
+  nav.primary-nav ul{ list-style:none; display:flex; gap:26px; margin:0; padding:0; }
+  nav.primary-nav a{ text-decoration:none; font-size:.92rem; border-bottom:2px solid transparent; padding-bottom:3px; }
+  nav.primary-nav a:hover, nav.primary-nav a:focus-visible{ border-color:var(--gold); outline:none; }
+  nav.primary-nav a:focus-visible{ outline:2px solid var(--terracotta); outline-offset:4px; }
+
+  section.hero{ max-width:1080px; margin:0 auto; padding:60px 24px 30px; }
+  p.eyebrow{
+    font-family:var(--mono); font-size:.75rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--slate); margin-bottom:12px;
+  }
+  h1.hero-title{ font-size:clamp(2rem,4.6vw,3.1rem); max-width:18ch; }
+  p.hero-sub{ max-width:56ch; color:var(--slate); font-size:1.05rem; }
+
+  /* ---- Correctly nested article demo (fixes Case 2) ---- */
+  article.about-card{
+    max-width:1080px; margin:8px auto 60px; padding:0 24px;
+  }
+  article.about-card .card-inner{
+    background:#fff; border:1px solid var(--line); border-radius:12px; padding:28px 30px;
+  }
+  article.about-card header{ margin-bottom:10px; }
+  article.about-card p{ color:var(--slate); max-width:62ch; }
+
+  section.block{ max-width:1080px; margin:0 auto; padding:50px 24px; border-top:1px solid var(--line); }
+  section.block .block-head{ max-width:60ch; margin-bottom:30px; }
+  section.block .block-head h2{ font-size:1.7rem; }
+  section.block .block-head p{ color:var(--slate); }
+
+  /* ---- Forms (fixes Case 1 & Case 3) ---- */
+  form{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:26px 28px; max-width:520px; }
+  fieldset{ border:none; padding:0; margin:0 0 6px; }
+  legend{ font-family:var(--display); font-size:1.05rem; font-weight:600; margin-bottom:14px; padding:0; }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:.86rem; font-weight:500; margin-bottom:6px; }
+  .field .hint{ font-size:.76rem; color:var(--slate); margin-top:5px; }
+  input, select{
+    width:100%; padding:11px 12px; border-radius:8px; border:1px solid var(--line);
+    background:var(--cream); font-family:var(--body); font-size:.95rem; color:var(--ink);
+  }
+  input:focus-visible, select:focus-visible{ outline:2px solid var(--terracotta); outline-offset:1px; }
+  button[type="submit"]{
+    width:100%; margin-top:6px; padding:13px 16px; border:none; border-radius:8px;
+    background:var(--ink); color:var(--cream); font-weight:600; font-family:var(--display);
+    font-size:1rem; cursor:pointer;
+  }
+  button[type="submit"]:hover{ background:#132038; }
+  .method-tag{
+    font-family:var(--mono); font-size:.72rem; color:var(--slate);
+    display:flex; justify-content:space-between; margin-bottom:18px;
+  }
+  .status{ font-family:var(--mono); font-size:.8rem; margin-top:12px; min-height:1.2em; color:var(--success); }
+
+  .protocol-note{
+    font-family:var(--mono); font-size:.78rem; color:var(--slate);
+    border-left:2px solid var(--terracotta); padding-left:12px; max-width:56ch; margin-top:22px;
+  }
+  .protocol-note strong{ color:var(--terracotta); }
+
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:start; }
+  @media (max-width:820px){ .two-col{ grid-template-columns:1fr; } }
+
+  footer.site-foot{
+    max-width:1080px; margin:0 auto; padding:34px 24px 60px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:var(--mono); font-size:.75rem; color:var(--slate);
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-head">
+  <nav class="primary-nav" aria-label="Primary">
+    <div class="brand"><span class="mark"></span> Confluence Symposium</div>
+    <ul>
+      <li><a href="#register">Register</a></li>
+      <li><a href="#login">Attendee login</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="about">
+    <p class="eyebrow">National student symposium &middot; 2026</p>
+    <h1 class="hero-title">One portal for registration, schedule, and check-in.</h1>
+    <p class="hero-sub">Confluence brings every symposium workflow &mdash; sign-up, login, and paper
+      submission &mdash; onto a single standards-compliant page.</p>
+  </section>
+
+  <!-- Corrected, well-nested content block: header > h1, separate <p>, both closed properly -->
+  <article class="about-card">
+    <div class="card-inner">
+      <header>
+        <h1 style="font-size:1.3rem;">Welcome</h1>
+      </header>
+      <p>About us: Confluence is organised by the Department of Computer Science to bring
+        student researchers, faculty, and industry reviewers onto one shared schedule.</p>
+    </div>
+  </article>
+
+  <!-- ============ CASE 1 + CASE 3 FIX: Registration form ============ -->
+  <section class="block" id="register">
+    <div class="two-col">
+      <div class="block-head">
+        <h2>Symposium registration</h2>
+        <p>Every field is labelled and grouped under a semantic <code>&lt;section&gt;</code>, with a
+          <code>&lt;fieldset&gt;</code>/<code>&lt;legend&gt;</code> pair identifying the form's purpose
+          for assistive technology.</p>
+        <p class="protocol-note">
+          <strong>method="post"</strong> &mdash; registration data belongs in the request body, not the
+          URL query string, so names and emails aren't logged in browser history or server access logs.
+          Delivered over <strong>HTTPS</strong>, so data is encrypted in transit.
+        </p>
+      </div>
+
+      <form action="/register" method="post" id="registerForm" novalidate>
+        <div class="method-tag"><span>POST /register</span><span>application/x-www-form-urlencoded</span></div>
+        <fieldset>
+          <legend>Attendee details</legend>
+          <div class="field">
+            <label for="reg-name">Full name</label>
+            <input type="text" id="reg-name" name="name" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="reg-email">Email address</label>
+            <input type="email" id="reg-email" name="email" required autocomplete="email">
+            <p class="hint">We'll send your check-in QR code here.</p>
+          </div>
+          <div class="field">
+            <label for="reg-dept">Department</label>
+            <select id="reg-dept" name="department" required>
+              <option value="">Select department</option>
+              <option value="cse">Computer Science</option>
+              <option value="ece">Electronics</option>
+              <option value="mech">Mechanical</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </fieldset>
+        <button type="submit">Register for symposium</button>
+        <p class="status" id="registerStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ CASE 3 FIX: corrected login form ============ -->
+  <section class="block" id="login">
+    <div class="two-col">
+      <div class="block-head">
+        <h2>Attendee login</h2>
+        <p>The original login used <code>method="GET"</code> and
+          <code>&lt;button type="button"&gt;</code> &mdash; neither submits the form, so no HTTP
+          request was ever sent. This version uses <code>POST</code> with a real
+          <code>type="submit"</code> button, and marks the password field so it isn't shown in
+          plain text.</p>
+      </div>
+
+      <form action="/login" method="post" id="loginForm">
+        <div class="method-tag"><span>POST /login</span><span>application/x-www-form-urlencoded</span></div>
+        <fieldset>
+          <legend>Sign in</legend>
+          <div class="field">
+            <label for="login-user">Username</label>
+            <input type="text" id="login-user" name="username" required autocomplete="username">
+          </div>
+          <div class="field">
+            <label for="login-pass">Password</label>
+            <input type="password" id="login-pass" name="password" required autocomplete="current-password">
+          </div>
+        </fieldset>
+        <button type="submit">Log in</button>
+        <p class="status" id="loginStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <span>&copy; 2026 Confluence Symposium</span>
+  <span>Served over HTTPS &middot; W3C-compliant markup</span>
+</footer>
+
+<script>
+  document.getElementById('registerForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('registerStatus').textContent =
+      'Request captured — a real POST would send this to /register.';
+  });
+  document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('loginStatus').textContent =
+      'Request captured — a real POST would send this to /login.';
+  });
+</script>
+
+</body>
+</html>
