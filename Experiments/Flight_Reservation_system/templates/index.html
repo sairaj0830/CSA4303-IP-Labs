@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyReserve | Flight Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 4rem 2rem 6rem;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        /* Search Interface */
+        .search-container {
+            background: var(--surface);
+            max-width: 800px;
+            margin: -3rem auto 2rem;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Results Section */
+        .results-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem 4rem;
+        }
+
+        .flight-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .airline-info h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.25rem;
+        }
+
+        .route-info {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .price-section {
+            text-align: right;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading State */
+        .loader {
+            text-align: center;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: none;
+            padding: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .search-container {
+                grid-template-columns: 1fr;
+                margin: -2rem 1rem 2rem;
+            }
+            .flight-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .price-section {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>Where to next?</h1>
+        <p>Find and book the best flights in real-time.</p>
+    </div>
+
+    <form class="search-container" id="searchForm">
+        <div class="input-group">
+            <label for="origin">From (Airport Code)</label>
+            <input type="text" id="origin" placeholder="e.g. NYC" required maxlength="3">
+        </div>
+        <div class="input-group">
+            <label for="dest">To (Airport Code)</label>
+            <input type="text" id="dest" placeholder="e.g. LON" required maxlength="3">
+        </div>
+        <button type="submit" class="btn">Search Flights</button>
+    </form>
+
+    <div class="results-container">
+        <div class="loader" id="loader">Searching the skies...</div>
+        <div id="results">
+            <!-- Flight cards will be injected here via JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent page reload
+            
+            const origin = document.getElementById('origin').value;
+            const dest = document.getElementById('dest').value;
+            
+            const resultsDiv = document.getElementById('results');
+            const loader = document.getElementById('loader');
+            
+            // UI Loading state
+            resultsDiv.innerHTML = '';
+            loader.style.display = 'block';
+
+            try {
+                // Fetch data from Python backend
+                const response = await fetch(`/api/flights?origin=${origin}&dest=${dest}`);
+                const flights = await response.json();
+                
+                loader.style.display = 'none';
+
+                if(flights.length === 0) {
+                    resultsDiv.innerHTML = '<div style="text-align:center; padding: 2rem; color: #64748b;">No flights found for this route. Try NYC to LON.</div>';
+                    return;
+                }
+
+                // Dynamically build interactive flight cards
+                flights.forEach(f => {
+                    const card = document.createElement('div');
+                    card.className = 'flight-card';
+                    card.innerHTML = `
+                        <div class="airline-info">
+                            <h3>${f.airline}</h3>
+                            <div class="route-info">
+                                <strong>${f.origin}</strong> ➔ <strong>${f.destination}</strong>
+                                <span>|</span>
+                                <span>Departs: ${f.time}</span>
+                                <span>|</span>
+                                <span>Flight: ${f.flight_no}</span>
+                            </div>
+                        </div>
+                        <div class="price-section">
+                            <div class="price">$${f.price}</div>
+                            <button class="btn" onclick="initiateBooking('${f.id}', '${f.airline}')">Select Seat</button>
+                        </div>
+                    `;
+                    resultsDiv.appendChild(card);
+                });
+            } catch (error) {
+                loader.style.display = 'none';
+                resultsDiv.innerHTML = '<div style="color: red; text-align: center;">Error connecting to the server.</div>';
+            }
+        });
+
+        function initiateBooking(flightId, airline) {
+            // In a complete system, this triggers a modal or redirects to a booking page
+            alert(`Booking initiated for ${airline} (System ID: ${flightId}).\n\nNext Step: Render Seat Selection UI.`);
+        }
+    </script>
+</body>
+</html>
