@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocol Notes &mdash; HTTP, DOM &amp; Standards Reference</title>
+<style>
+  :root{
+    --ink:#14181F;
+    --panel:#1C212B;
+    --paper:#F4F1EA;
+    --cyan:#4FA8E0;
+    --coral:#E0574F;
+    --amber:#E0A83F;
+    --slate:#8A8F9C;
+    --line: rgba(20,24,31,0.12);
+    --line-dark: rgba(255,255,255,0.08);
+    --display:'Space Grotesk','Arial Narrow',sans-serif;
+    --body:'Inter',-apple-system,'Segoe UI',sans-serif;
+    --mono:'JetBrains Mono','Courier New',monospace;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); line-height:1.6; }
+  h1,h2,h3{ font-family:var(--display); margin:0 0 .4em; letter-spacing:-0.01em; }
+  p{ margin:0 0 1em; color:#3a3f52; }
+  code{ font-family:var(--mono); background:rgba(20,24,31,0.06); padding:1px 5px; border-radius:4px; font-size:.88em; }
+
+  a.skip-link{ position:absolute; left:-999px; background:var(--ink); color:var(--paper); padding:10px 16px; border-radius:6px; z-index:100; }
+  a.skip-link:focus{ left:16px; top:16px; }
+
+  header.site-head{
+    position:sticky; top:0; z-index:50;
+    background:rgba(244,241,234,0.94); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.primary-nav{
+    max-width:1120px; margin:0 auto; padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:1.1rem; white-space:nowrap; }
+  .brand .dot{ width:9px; height:9px; background:var(--cyan); border-radius:2px; transform:rotate(45deg); }
+  nav.primary-nav ul{ list-style:none; display:flex; gap:20px; margin:0; padding:0; overflow-x:auto; }
+  nav.primary-nav a{ text-decoration:none; color:var(--ink); font-size:.86rem; white-space:nowrap; border-bottom:2px solid transparent; padding-bottom:3px; }
+  nav.primary-nav a:hover, nav.primary-nav a:focus-visible{ border-color:var(--cyan); outline:none; }
+
+  section.hero{ max-width:1120px; margin:0 auto; padding:56px 24px 20px; }
+  p.eyebrow{ font-family:var(--mono); font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--slate); margin-bottom:12px; }
+  h1.hero-title{ font-size:clamp(1.9rem,4.4vw,2.9rem); max-width:22ch; }
+  p.hero-sub{ max-width:60ch; font-size:1.02rem; }
+
+  section.topic{ max-width:1120px; margin:0 auto; padding:44px 24px; border-top:1px solid var(--line); }
+  .topic-head{ max-width:70ch; margin-bottom:26px; }
+  .topic-head p.tag{
+    display:inline-block; font-family:var(--mono); font-size:.72rem;
+    background:rgba(79,168,224,0.12); color:#1a5f8f; border:1px solid rgba(79,168,224,0.35);
+    padding:3px 9px; border-radius:20px; margin-bottom:10px;
+  }
+  .topic-head h2{ font-size:1.55rem; }
+
+  .panel-row{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:860px){ .panel-row{ grid-template-columns:1fr; } }
+
+  .panel{ border-radius:12px; overflow:hidden; border:1px solid var(--line-dark); background:var(--panel); }
+  .panel-bar{ display:flex; align-items:center; gap:8px; padding:9px 14px; background:rgba(255,255,255,0.04);
+    font-family:var(--mono); font-size:.7rem; color:#8b93b0; justify-content:space-between; }
+  .panel-bar .traffic{ display:flex; gap:6px; }
+  .traffic span{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .traffic .r{ background:#ff5f57; } .traffic .y{ background:#febc2e; } .traffic .g{ background:#28c840; }
+  .panel.ok .panel-bar{ border-top:2px solid var(--cyan); }
+  .panel.bad .panel-bar{ border-top:2px solid var(--coral); }
+  pre.panel-body{ margin:0; padding:18px; font-family:var(--mono); font-size:.8rem; color:#d9dcec; line-height:1.75; overflow-x:auto; }
+  .flag{ color:var(--coral); }
+  .fix{ color:var(--cyan); }
+  .comment{ color:#6b7290; }
+
+  .callout{ margin-top:16px; padding:12px 14px; border-radius:8px; background:rgba(224,168,63,0.1); border:1px solid rgba(224,168,63,0.3); font-size:.86rem; color:#5c4712; }
+  .callout strong{ color:var(--amber); }
+
+  table.compare{ width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; border:1px solid var(--line); font-size:.9rem; }
+  table.compare th, table.compare td{ padding:12px 14px; text-align:left; border-bottom:1px solid var(--line); }
+  table.compare th{ font-family:var(--display); font-size:.82rem; background:rgba(20,24,31,0.04); }
+  table.compare tr:last-child td{ border-bottom:none; }
+  .badge{ display:inline-block; font-family:var(--mono); font-size:.72rem; padding:2px 8px; border-radius:20px; }
+  .badge.low{ background:rgba(224,87,79,0.12); color:#8f2f28; }
+  .badge.mod{ background:rgba(224,168,63,0.15); color:#6b4e0c; }
+
+  .timeline{ position:relative; padding-left:28px; margin-top:6px; }
+  .timeline::before{ content:''; position:absolute; left:8px; top:6px; bottom:6px; width:1.5px; background:var(--line); }
+  .step{ position:relative; padding-bottom:24px; }
+  .step:last-child{ padding-bottom:0; }
+  .step::before{
+    content:''; position:absolute; left:-28px; top:3px; width:11px; height:11px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--cyan);
+  }
+  .step h3{ font-size:.98rem; font-family:var(--display); margin-bottom:3px; }
+  .step p{ font-size:.9rem; margin-bottom:2px; }
+  .step .delay{ font-family:var(--mono); font-size:.75rem; color:var(--coral); }
+
+  footer.site-foot{
+    max-width:1120px; margin:0 auto; padding:32px 24px 60px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:var(--mono); font-size:.75rem; color:var(--slate);
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-head">
+  <nav class="primary-nav" aria-label="Primary">
+    <div class="brand"><span class="dot"></span> Protocol Notes</div>
+    <ul>
+      <li><a href="#http-response">HTTP response</a></li>
+      <li><a href="#dom">DOM structure</a></li>
+      <li><a href="#get-post">GET vs POST</a></li>
+      <li><a href="#inspection">HTML inspection</a></li>
+      <li><a href="#flow">Request flow</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <p class="eyebrow">Internet programming &middot; CO-1 reference</p>
+    <h1 class="hero-title">Five things that break a standards-compliant page &mdash; and the fix for each.</h1>
+    <p class="hero-sub">A working reference page: every broken snippet from the case studies sits next to
+      its corrected version, with the reasoning in between.</p>
+  </section>
+
+  <!-- ============ 1: HTTP Response Analysis ============ -->
+  <section class="topic" id="http-response">
+    <div class="topic-head">
+      <span class="tag">Case 1</span>
+      <h2>HTTP response analysis</h2>
+      <p>A response header with a negative <code>Content-Length</code> and a status line that claims
+        success it can't actually deliver.</p>
+    </div>
+    <div class="panel-row">
+      <div class="panel bad">
+        <div class="panel-bar"><span class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></span>response.txt &mdash; as received</div>
+        <pre class="panel-body">HTTP/1.1 200 OK
+Date: Mon, 01 Apr 2026 10:00:00 GMT
+Content-Type: text/html
+<span class="flag">Content-Length: -150</span>
+Connection: keep-alive</pre>
+      </div>
+      <div class="panel ok">
+        <div class="panel-bar"><span class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></span>response.txt &mdash; corrected</div>
+        <pre class="panel-body">HTTP/1.1 200 OK
+Date: Mon, 01 Apr 2026 10:00:00 GMT
+Content-Type: text/html
+<span class="fix">Content-Length: 150</span>
+Connection: keep-alive</pre>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Why it matters:</strong> Content-Length is a byte count and can never be negative &mdash;
+      it tells the browser exactly how many bytes of body to read before it stops. A negative or
+      malformed value forces the browser to fall back on the connection closing, or to reject the
+      response outright, so the "200 OK" status is misleading: the header block is malformed even
+      though the status line looks fine.
+    </div>
+  </section>
+
+  <!-- ============ 2: DOM Structure Analysis ============ -->
+  <section class="topic" id="dom">
+    <div class="topic-head">
+      <span class="tag">Case 2</span>
+      <h2>DOM structure analysis</h2>
+      <p>An unclosed <code>&lt;p&gt;</code> inside an unclosed <code>&lt;div&gt;</code> &mdash; the
+        browser has to guess where each element actually ends.</p>
+    </div>
+    <div class="panel-row">
+      <div class="panel bad">
+        <div class="panel-bar"><span class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></span>page.html &mdash; as received</div>
+        <pre class="panel-body">&lt;html&gt;
+  &lt;head&gt;&lt;title&gt;Test Page&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;div&gt;
+      <span class="flag">&lt;p&gt;Hello World</span>
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="panel ok">
+        <div class="panel-bar"><span class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></span>page.html &mdash; corrected</div>
+        <pre class="panel-body">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;&lt;title&gt;Test Page&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;div&gt;
+      <span class="fix">&lt;p&gt;Hello World&lt;/p&gt;</span>
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Why it matters:</strong> without a closing <code>&lt;/p&gt;</code>, the parser's error-recovery
+      rules decide where the paragraph ends &mdash; and different browser engines apply slightly different
+      recovery rules, so the DOM tree (and therefore the layout) isn't guaranteed to match across browsers.
+      A missing <code>&lt;!DOCTYPE html&gt;</code> compounds this by pushing the page into quirks mode.
+    </div>
+  </section>
+
+  <!-- ============ 3: GET vs POST ============ -->
+  <section class="topic" id="get-post">
+    <div class="topic-head">
+      <span class="tag">Case 3</span>
+      <h2>GET vs POST in a login system</h2>
+      <p>Same login form, two very different exposure levels.</p>
+    </div>
+    <table class="compare">
+      <thead>
+        <tr><th>Method</th><th>URL example</th><th>Data visibility</th><th>Security level</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>GET</code></td><td><code>/login?user=admin&amp;pass=1234</code></td><td>Visible in URL, browser history, server logs</td><td><span class="badge low">Low</span></td></tr>
+        <tr><td><code>POST</code></td><td><code>/login</code></td><td>Sent in the request body</td><td><span class="badge mod">Moderate</span></td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <strong>Best practice:</strong> POST alone only hides credentials from the URL bar &mdash; the
+      body is still plain text on the wire unless the connection is HTTPS. Secure login means
+      <code>method="post"</code> over HTTPS, hashed/salted passwords server-side, and rate-limiting on
+      the endpoint to blunt brute-force attempts.
+    </div>
+  </section>
+
+  <!-- ============ 4: HTML Code Inspection ============ -->
+  <section class="topic" id="inspection">
+    <div class="topic-head">
+      <span class="tag">Case 4</span>
+      <h2>HTML code inspection</h2>
+      <p>Two unclosed text elements and an <code>&lt;img&gt;</code> with no fallback text.</p>
+    </div>
+    <div class="panel-row">
+      <div class="panel bad">
+        <div class="panel-bar"><span class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></span>sample.html &mdash; as received</div>
+        <pre class="panel-body">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Sample&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+<span class="flag">&lt;h1&gt;Welcome</span>
+<span class="flag">&lt;p&gt;This is a paragraph</span>
+<span class="flag">&lt;img src="image.jpg"&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="panel ok">
+        <div class="panel-bar"><span class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></span>sample.html &mdash; corrected</div>
+        <pre class="panel-body">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;&lt;title&gt;Sample&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+<span class="fix">&lt;h1&gt;Welcome&lt;/h1&gt;</span>
+<span class="fix">&lt;p&gt;This is a paragraph&lt;/p&gt;</span>
+<span class="fix">&lt;img src="image.jpg" alt="Descriptive text"&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Why it matters:</strong> <code>&lt;img&gt;</code> is a void element so it never needs a
+      closing tag &mdash; its actual problem is the missing <code>alt</code> attribute, which is what
+      screen readers announce and what displays if the image fails to load. Browsers will silently
+      auto-close the unclosed <code>&lt;h1&gt;</code> and <code>&lt;p&gt;</code>, but which element
+      "wins" the surrounding content is inconsistent across engines.
+    </div>
+  </section>
+
+  <!-- ============ 5: Browser-Server Communication Flow ============ -->
+  <section class="topic" id="flow">
+    <div class="topic-head">
+      <span class="tag">Case 5</span>
+      <h2>Browser-server communication flow</h2>
+      <p>Six steps between typing a URL and seeing a rendered page &mdash; each one a place delay can
+        creep in.</p>
+    </div>
+    <div class="timeline">
+      <div class="step">
+        <h3>1. URL entered</h3>
+        <p>Browser parses the URL into scheme, host, path, and query.</p>
+      </div>
+      <div class="step">
+        <h3>2. DNS lookup</h3>
+        <p>Hostname resolves to an IP address via a chain of DNS resolvers.</p>
+        <p class="delay">Delay risk: cold cache forces a full resolver chain lookup</p>
+      </div>
+      <div class="step">
+        <h3>3. HTTP request sent</h3>
+        <p>TCP/TLS handshake completes, then the request line, headers, and body (if any) go out.</p>
+        <p class="delay">Delay risk: TLS handshake round-trips, slow or congested network</p>
+      </div>
+      <div class="step">
+        <h3>4. Server processes request</h3>
+        <p>Routing, auth checks, database queries, and template rendering happen server-side.</p>
+        <p class="delay">Delay risk: unindexed queries, cold application server, backend contention</p>
+      </div>
+      <div class="step">
+        <h3>5. Response returned</h3>
+        <p>Status line, headers, and body travel back over the same connection.</p>
+        <p class="delay">Delay risk: large uncompressed payloads, no caching headers</p>
+      </div>
+      <div class="step">
+        <h3>6. Browser renders</h3>
+        <p>HTML parses into the DOM, CSS into the CSSOM, both combine into the render tree, then layout and paint occur.</p>
+        <p class="delay">Delay risk: render-blocking CSS/JS in the document head</p>
+      </div>
+    </div>
+    <div class="callout">
+      <strong>Optimizations:</strong> DNS prefetching/caching, HTTP keep-alive to skip repeat
+      handshakes, gzip/Brotli compression, server-side caching for repeated queries, and deferring or
+      async-loading non-critical scripts so they don't block first render.
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <span>&copy; 2026 Protocol Notes</span>
+  <span>W3C-compliant markup &middot; HTTP/1.1</span>
+</footer>
+
+</body>
+</html>

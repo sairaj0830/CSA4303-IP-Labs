@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial;
+}
+
+.dashboard {
+    display: grid;
+
+    grid-template-columns: 200px 1fr;
+
+    grid-template-rows: 70px 1fr;
+
+    min-height: 100vh;
+}
+
+.header {
+    grid-column: 1 / 3;
+    background: #222;
+    color: white;
+    padding: 20px;
+    font-size: 25px;
+}
+
+.sidebar {
+    background: #eee;
+    padding: 20px;
+}
+
+.sidebar p {
+    margin: 20px 0;
+}
+
+.content {
+    padding: 25px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px #ccc;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr;
+    }
+
+    .header {
+        grid-column: 1;
+    }
+
+    .content {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <header class="header">
+        Admin Dashboard
+    </header>
+
+    <aside class="sidebar">
+        <p>Dashboard</p>
+        <p>Users</p>
+        <p>Products</p>
+        <p>Settings</p>
+    </aside>
+
+    <main class="content">
+
+        <div class="card">
+            <h2>Users</h2>
+            <p>1,250</p>
+        </div>
+
+        <div class="card">
+            <h2>Orders</h2>
+            <p>850</p>
+        </div>
+
+        <div class="card">
+            <h2>Revenue</h2>
+            <p>₹2,50,000</p>
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

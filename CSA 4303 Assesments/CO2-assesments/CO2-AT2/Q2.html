@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Product Hover Effect</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+}
+
+.product {
+    width: 250px;
+    margin: 50px auto;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+
+    transition: 0.3s;
+}
+
+.product img {
+    width: 100%;
+    border-radius: 8px;
+
+    transition: transform 0.3s;
+}
+
+.product:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.product:hover img {
+    transform: scale(1.05);
+}
+
+.price {
+    color: green;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+button {
+    background: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: orange;
+}
+</style>
+</head>
+
+<body>
+
+<div class="product">
+
+    <img src="https://via.placeholder.com/250" alt="Product">
+
+    <h2>Smart Watch</h2>
+
+    <p>Modern smart watch with useful features.</p>
+
+    <p class="price">₹2,999</p>
+
+    <button>Buy Now</button>
+
+</div>
+
+</body>
+</html>

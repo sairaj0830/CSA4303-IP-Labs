@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dynamic Menu</title>
+
+<style>
+body {
+    font-family: Arial;
+}
+
+.menu-button {
+    background: #222;
+    color: white;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.menu {
+    display: none;
+    width: 200px;
+    background: #eee;
+}
+
+.menu a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+.menu a:hover {
+    background: #ddd;
+}
+
+.menu.show {
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<button class="menu-button" id="menuButton">
+    ☰ Menu
+</button>
+
+<div class="menu" id="menu">
+
+    <a href="#">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+
+</div>
+
+<script>
+
+let button = document.getElementById("menuButton");
+
+let menu = document.getElementById("menu");
+
+button.addEventListener("click", function() {
+
+    menu.classList.toggle("show");
+
+});
+
+</script>
+
+</body>
+</html>
