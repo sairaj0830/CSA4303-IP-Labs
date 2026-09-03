@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Online Library</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="card">
+<h1>📚 Online Library</h1>
+<div class="controls">
+<input id="book" placeholder="Book Title">
+<input id="author" placeholder="Author">
+<button onclick="addBook()">Add Book</button>
+</div>
+<input id="search" placeholder="Search books..." onkeyup="searchBooks()">
+<table>
+<thead><tr><th>Title</th><th>Author</th><th>Action</th></tr></thead>
+<tbody id="list"></tbody>
+</table>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

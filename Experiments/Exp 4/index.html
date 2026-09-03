@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html><head><meta charset='UTF-8'><title>🏥 Hospital Appointment Booking System</title>
+<link rel='stylesheet' href='style.css'></head>
+<body>
+<div class='card'>
+<h1>🏥 Hospital Appointment Booking System</h1>
+<div class='form'>
+<input id='name' placeholder='Patient Name'>
+<select id='type'><option>General</option><option>Cardiology</option><option>Orthopedics</option><option>Dermatology</option></select>
+<button onclick='addItem()'>Book Appointment</button>
+</div>
+<input id='search' placeholder='Search...' onkeyup='searchItem()'>
+<table>
+<thead><tr><th>Patient Name</th><th>Department</th><th>Status</th><th>Action</th></tr></thead>
+<tbody id='tbl'></tbody>
+</table>
+</div>
+<script src='script.js'></script>
+</body></html>
